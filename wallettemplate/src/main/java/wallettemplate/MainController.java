@@ -22,9 +22,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.Pane;
-import org.bitcoinj.core.listeners.DownloadProgressTracker;
-import org.bitcoinj.core.Coin;
-import org.bitcoinj.utils.MonetaryFormat;
+import org.crownj.core.listeners.DownloadProgressTracker;
+import org.crownj.core.Coin;
+import org.crownj.utils.MonetaryFormat;
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
@@ -33,15 +33,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
-import org.bitcoinj.walletfx.application.MainWindowController;
-import org.bitcoinj.walletfx.application.WalletApplication;
-import org.bitcoinj.walletfx.utils.GuiUtils;
-import org.bitcoinj.walletfx.utils.TextFieldValidator;
-import org.bitcoinj.walletfx.controls.ClickableBitcoinAddress;
-import org.bitcoinj.walletfx.controls.NotificationBarPane;
-import org.bitcoinj.walletfx.utils.BitcoinUIModel;
-import org.bitcoinj.walletfx.utils.easing.EasingMode;
-import org.bitcoinj.walletfx.utils.easing.ElasticInterpolator;
+import org.crownj.walletfx.application.MainWindowController;
+import org.crownj.walletfx.application.WalletApplication;
+import org.crownj.walletfx.utils.GuiUtils;
+import org.crownj.walletfx.utils.TextFieldValidator;
+import org.crownj.walletfx.controls.ClickablecrownAddress;
+import org.crownj.walletfx.controls.NotificationBarPane;
+import org.crownj.walletfx.utils.crownUIModel;
+import org.crownj.walletfx.utils.easing.EasingMode;
+import org.crownj.walletfx.utils.easing.ElasticInterpolator;
 
 /**
  * Gets created auto-magically by FXMLLoader via reflection. The widget fields are set to the GUI controls they're named
@@ -51,11 +51,11 @@ public class MainController extends MainWindowController {
     public HBox controlsBox;
     public Label balance;
     public Button sendMoneyOutBtn;
-    public ClickableBitcoinAddress addressControl;
+    public ClickablecrownAddress addressControl;
 
-    private final BitcoinUIModel model = new BitcoinUIModel();
+    private final crownUIModel model = new crownUIModel();
     private NotificationBarPane.Item syncItem;
-    private static final MonetaryFormat MONETARY_FORMAT = MonetaryFormat.BTC.noCode();
+    private static final MonetaryFormat MONETARY_FORMAT = MonetaryFormat.CRW.noCode();
 
     private WalletApplication app;
     private NotificationBarPane notificationBar;
@@ -65,7 +65,7 @@ public class MainController extends MainWindowController {
         app = WalletApplication.instance();
         scene = new Scene(uiStack);
         TextFieldValidator.configureScene(scene);
-        // Special case of initOverlay that passes null as the 2nd parameter because ClickableBitcoinAddress is loaded by FXML
+        // Special case of initOverlay that passes null as the 2nd parameter because ClickablecrownAddress is loaded by FXML
         // TODO: Extract QRCode Pane to separate reusable class that is a more standard OverlayController instance
         addressControl.initOverlay(this, null);
         addressControl.setAppName(app.applicationName());
@@ -87,14 +87,14 @@ public class MainController extends MainWindowController {
     }
 
     @Override
-    public void onBitcoinSetup() {
+    public void oncrownSetup() {
         model.setWallet(app.walletAppKit().wallet());
         addressControl.addressProperty().bind(model.addressProperty());
         balance.textProperty().bind(createBalanceStringBinding(model.balanceProperty()));
         // Don't let the user click send money when the wallet is empty.
         sendMoneyOutBtn.disableProperty().bind(model.balanceProperty().isEqualTo(Coin.ZERO));
 
-        showBitcoinSyncMessage();
+        showcrownSyncMessage();
         model.syncProgressProperty().addListener(x -> {
             if (model.syncProgressProperty().get() >= 1.0) {
                 readyToGoAnimation();
@@ -103,7 +103,7 @@ public class MainController extends MainWindowController {
                     syncItem = null;
                 }
             } else if (syncItem == null) {
-                showBitcoinSyncMessage();
+                showcrownSyncMessage();
             }
         });
     }
@@ -116,8 +116,8 @@ public class MainController extends MainWindowController {
         return Bindings.createStringBinding(() -> formatCoin(coinProperty.getValue()), coinProperty);
     }
 
-    private void showBitcoinSyncMessage() {
-        syncItem = notificationBar.pushItem("Synchronising with the Bitcoin network", model.syncProgressProperty());
+    private void showcrownSyncMessage() {
+        syncItem = notificationBar.pushItem("Synchronising with the crown network", model.syncProgressProperty());
     }
 
     public void sendMoneyOut(ActionEvent event) {

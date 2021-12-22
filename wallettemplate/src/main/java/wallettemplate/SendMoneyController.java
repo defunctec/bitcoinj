@@ -17,9 +17,9 @@
 package wallettemplate;
 
 import javafx.scene.layout.HBox;
-import org.bitcoinj.core.*;
-import org.bitcoinj.wallet.SendRequest;
-import org.bitcoinj.wallet.Wallet;
+import org.crownj.core.*;
+import org.crownj.wallet.SendRequest;
+import org.crownj.wallet.Wallet;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -29,16 +29,16 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import org.bitcoinj.walletfx.application.WalletApplication;
-import org.bitcoinj.walletfx.overlay.OverlayController;
-import org.bitcoinj.walletfx.overlay.OverlayableStackPaneController;
+import org.crownj.walletfx.application.WalletApplication;
+import org.crownj.walletfx.overlay.OverlayController;
+import org.crownj.walletfx.overlay.OverlayableStackPaneController;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.bitcoinj.walletfx.controls.BitcoinAddressValidator;
-import org.bitcoinj.walletfx.utils.TextFieldValidator;
-import org.bitcoinj.walletfx.utils.WTUtils;
+import org.crownj.walletfx.controls.crownAddressValidator;
+import org.crownj.walletfx.utils.TextFieldValidator;
+import org.crownj.walletfx.utils.WTUtils;
 
 import static com.google.common.base.Preconditions.checkState;
-import static org.bitcoinj.walletfx.utils.GuiUtils.*;
+import static org.crownj.walletfx.utils.GuiUtils.*;
 
 import javax.annotation.Nullable;
 
@@ -48,7 +48,7 @@ public class SendMoneyController implements OverlayController<SendMoneyControlle
     public TextField address;
     public Label titleLabel;
     public TextField amountEdit;
-    public Label btcLabel;
+    public Label CRWLabel;
 
     private WalletApplication app;
     private OverlayableStackPaneController rootController;
@@ -68,7 +68,7 @@ public class SendMoneyController implements OverlayController<SendMoneyControlle
         app = WalletApplication.instance();
         Coin balance = app.walletAppKit().wallet().getBalance();
         checkState(!balance.isZero());
-        new BitcoinAddressValidator(app.params(), address, sendBtn);
+        new crownAddressValidator(app.params(), address, sendBtn);
         new TextFieldValidator(amountEdit, text ->
                 !WTUtils.didThrow(() -> checkState(Coin.parseCoin(text).compareTo(balance) <= 0)));
         amountEdit.setText(balance.toPlainString());
@@ -114,7 +114,7 @@ public class SendMoneyController implements OverlayController<SendMoneyControlle
             sendBtn.setDisable(true);
             address.setDisable(true);
             ((HBox)amountEdit.getParent()).getChildren().remove(amountEdit);
-            ((HBox)btcLabel.getParent()).getChildren().remove(btcLabel);
+            ((HBox)CRWLabel.getParent()).getChildren().remove(CRWLabel);
             updateTitleForBroadcast();
         } catch (InsufficientMoneyException e) {
             informationalAlert("Could not empty the wallet",

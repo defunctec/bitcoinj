@@ -48,16 +48,16 @@ protobuf {
 }
 
 test {
-    exclude 'org/bitcoinj/core/PeerTest*'
-    exclude 'org/bitcoinj/core/TransactionBroadcastTest*'
-    exclude 'org/bitcoinj/net/discovery/DnsDiscoveryTest*'
+    exclude 'org/crownj/core/PeerTest*'
+    exclude 'org/crownj/core/TransactionBroadcastTest*'
+    exclude 'org/crownj/net/discovery/DnsDiscoveryTest*'
     testLogging {
         events "failed"
         exceptionFormat "full"
     }
 }
 
-ext.moduleName = 'org.bitcoinj.core'
+ext.moduleName = 'org.crownj.core'
 
 jar {
     inputs.property("moduleName", moduleName)
@@ -84,13 +84,13 @@ artifacts {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifactId = 'bitcoinj-core'
+            artifactId = 'crownj-core'
             from components.java
             artifact sourcesJar
             artifact javadocJar
 
             pom {
-                description = 'A Java Bitcoin library'
+                description = 'A Java crown library'
             }
         }
     }
